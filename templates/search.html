@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Name</title>
+</head>
+<body>
+    <h1>Name Search</h1>
+    <form>
+        <label for="name">Enter a name to search:</label>
+        <input type="text" id="name" name="name">
+        <button type="button" id="searchButton">Search</button>
+    </form>
+    <div id="results"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.getElementById("searchButton").addEventListener("click", () => {
+            const name = document.getElementById("name").value;
+            
+            axios.post("/search", { name: name }, { headers: { "Content-Type": "application/json" } })
+                .then(response => {
+                    const results = response.data.results;
+                    const resultsDiv = document.getElementById("results");
+                    resultsDiv.innerHTML = ""; // Clear previous results
+                    
+                    results.map(result => {
+                        const p = document.createElement("p");
+                        p.textContent = result;
+                        resultsDiv.appendChild(p);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        });
+    </script>
+</body>
+</html>
